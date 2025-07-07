@@ -42,6 +42,11 @@ bottomSlider.addEventListener("transitionend",()=>{
     }
     isSliding = false;
 })
+
+//for initial condition
+bottomCards[currentIndex].classList.add("active");
+
+//for show main card
 function showCard(index){
     cards.forEach(card => card.classList.remove("active"));
     cards[index].classList.add("active");
@@ -50,18 +55,32 @@ function showCard(index){
     bottomCards[index].classList.add("active");
 }
 
-document.getElementById("right").addEventListener("click",function(){
+function toRight(){
     if(isSliding)return;
     isSliding = true;
     currentIndex = (currentIndex + 1) % cards.length;
     showCard(currentIndex);
     slideTo(liveIndex + 1);
-});
-
-document.getElementById("left").addEventListener("click",()=>{
+}
+function toLeft(){
     if(isSliding)return;
     isSliding = true;
     currentIndex = (currentIndex - 1 + cards.length) % cards.length;
     showCard(currentIndex);
     slideTo(liveIndex - 1);
+}
+document.getElementById("right").addEventListener("click",toRight);
+
+document.getElementById("left").addEventListener("click",toLeft);
+
+
+bottomCards.forEach((bCard,index)=>{
+    bCard.addEventListener("click",()=>{
+        if(isSliding)return;
+        isSliding = true;
+        currentIndex = index;
+        showCard(currentIndex);
+        slideTo(visibleCount + index);
+        
+    });
 })
