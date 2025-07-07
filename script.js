@@ -12,8 +12,10 @@ const originalCards = Array.from(bottomSlider.children);
 
 for(let i = 0; i < visibleCount; i++){
     const firstClone = originalCards[i].cloneNode(true);
+    addClickListenerToCard(firstClone, i);
     bottomSlider.append(firstClone);
     const lastClone = originalCards[originalCards.length - i - 1].cloneNode(true);
+    addClickListenerToCard(lastClone, originalCards.length - i - 1);
     bottomSlider.prepend(lastClone);
 }
 
@@ -73,14 +75,24 @@ document.getElementById("right").addEventListener("click",toRight);
 
 document.getElementById("left").addEventListener("click",toLeft);
 
-
+function addClickListenerToCard(card, index) {
+    card.addEventListener("click", () => {
+      if (isSliding) return;
+      bottomSlider.style.transition = "none";
+      isSliding = true;
+      currentIndex = index;
+      showCard(index);
+      slideTo(visibleCount + index);
+    });
+  }
+  
 bottomCards.forEach((bCard,index)=>{
-    bCard.addEventListener("click",()=>{
-        if(isSliding)return;
+    bCard.addEventListener("click", () => {
+        if (isSliding) return;
+    
         isSliding = true;
         currentIndex = index;
-        showCard(currentIndex);
+        showCard(index);
         slideTo(visibleCount + index);
-        
-    });
-})
+      });    
+});
